@@ -4,6 +4,9 @@ from datetime import datetime
 from pathlib import Path
 
 
+BASE_DIR = Path(__file__).parent.parent
+
+
 class PepParsePipeline:
     def open_spider(self, spider):
         self.status_counter = defaultdict(int)
@@ -21,7 +24,7 @@ class PepParsePipeline:
         results = [('Статус', 'Количество')]
         results.extend(self.status_counter.items())
         results.append(('Total', self.total))
-        path_to_file = Path(__file__).parent.parent / 'results'
+        path_to_file = BASE_DIR / 'results'
         date_for_file = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         fullfilename = path_to_file / f'status_summary_{date_for_file}.csv'
         with open(fullfilename, mode='w', encoding='utf-8') as f:
