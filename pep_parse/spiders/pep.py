@@ -20,6 +20,9 @@ class PepSpider(scrapy.Spider):
         if len(title) > 1:
             pep_number = int(title[0].replace('PEP', '').strip())
             pep_name = title[1].strip()
+        else:
+            pep_number = 'err'
+            pep_name = 'Not recognized'
 
         data = {
             'number': pep_number,

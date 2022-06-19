@@ -10,20 +10,18 @@ BASE_DIR = Path(__file__).parent.parent
 class PepParsePipeline:
     def open_spider(self, spider):
         self.status_counter = defaultdict(int)
-        self.total = 0
 
     def process_item(self, item, spider):
         item_status = item['status']
         self.status_counter[item_status] = self.status_counter.get(
             item_status, 0
         ) + 1
-        self.total += 1
         return item
 
     def close_spider(self, spider):
         results = [('Статус', 'Количество')]
         results.extend(self.status_counter.items())
-        results.append(('Total', self.total))
+        results.append(('Total', sum(self.status_counter.values())))
         path_to_file = BASE_DIR / 'results'
         date_for_file = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         fullfilename = path_to_file / f'status_summary_{date_for_file}.csv'
