@@ -1,4 +1,3 @@
-import numbers
 import scrapy
 
 from pep_parse.items import PepParseItem
@@ -10,7 +9,9 @@ class PepSpider(scrapy.Spider):
     start_urls = ['https://peps.python.org/']
 
     def parse(self, response):
-        all_peps = response.xpath('//section[@id="numerical-index"]').css('a::attr(href)').getall()
+        all_peps = response.xpath(
+            '//section[@id="numerical-index"]'
+        ).css('a::attr(href)').getall()
         for pep_link in all_peps:
             yield response.follow(pep_link, callback=self.parse_pep)
 
@@ -21,9 +22,9 @@ class PepSpider(scrapy.Spider):
             pep_name = title[1].strip()
 
         data = {
-                'number': pep_number,
-                'name': pep_name,
-                'status':response.css('dt:contains("Status") + dd::text').get(),
-            }
+            'number': pep_number,
+            'name': pep_name,
+            'status': response.css('dt:contains("Status") + dd::text').get(),
+        }
 
         yield PepParseItem(data)
