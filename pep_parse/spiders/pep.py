@@ -13,7 +13,8 @@ class PepSpider(scrapy.Spider):
             '//section[@id="numerical-index"]'
         ).css('a::attr(href)').getall()
         for pep_link in all_peps:
-            yield response.follow(pep_link, callback=self.parse_pep)
+            final_pep_url = response.urljoin(pep_link) + "/"
+            yield response.follow(final_pep_url, callback=self.parse_pep)
 
     def parse_pep(self, response):
         title = response.css('h1.page-title::text').get().split(' – ')
